@@ -54,7 +54,7 @@ L.control
       '<form class="form-inline search-bar">' +
       '<div class="form-group mx-sm-3 mb-2">' +
       '<label for="inputPassword2" class="sr-only">Look for Restaurants</label>' +
-      '<input type="text" class="form-control"  id="query" placeholder="Look for Restaurants">' +
+      '<input type="text" class="form-control" id="query" placeholder="Look for Restaurants">' +
       "</div>" +
       '<button type="button" class="btn btn-success mb-2" id="btnSubmitModal">Search</button>' +
       "</form>" +

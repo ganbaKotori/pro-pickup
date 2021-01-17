@@ -1,3 +1,6 @@
+var currentlySelectedRestaurant;
+var restaurantsFromQuery = [];
+
 var searchRestaurant = function (query) {
   console.log(query);
   $.get(
@@ -6,11 +9,17 @@ var searchRestaurant = function (query) {
     function (data, textStatus, jqXHR) {
       // success callback
       console.log(data);
+      restaurantsFromQuery = [];
       var restaurants = data.results;
       $(".blurBox").empty();
       $(".blurBox").append('<div class="list-group">');
       for (key in restaurants) {
-        var marker = L.marker([restaurants[key].position.lat,restaurants[key].position.lon]).addTo(map);
+        var name = restaurants[key].poi.name
+        name = name.replace(/'/g, "\\'")
+        var marker = L.marker([
+          restaurants[key].position.lat,
+          restaurants[key].position.lon,
+        ]).addTo(map);
         //$(".blurBox").append("<p>" + restaurants[key].poi.name + "</p>")
         var address =
           restaurants[key].address.streetNumber +
@@ -19,6 +28,9 @@ var searchRestaurant = function (query) {
         var occupancy = restaurants[key].occupancy
           ? restaurants[key].occupancy
           : 0;
+          var max_occupancy = restaurants[key].max_occupancy
+          ? restaurants[key].max_occupancy
+          : "10";
         $(".blurBox").append(
           "<hr/>" +
             "<a onclick=\"showOppcupants('" +
@@ -27,7 +39,9 @@ var searchRestaurant = function (query) {
             restaurants[key].position.lat +
             "," +
             restaurants[key].position.lon +
-            '])"><div class="d-flex w-100 justify-content-between">' +
+            "],'" +
+            name + 
+            '\')"><div class="d-flex w-100 justify-content-between">' +
             '<h5 class="mb-1">' +
             restaurants[key].poi.name +
             "</h5>" +
@@ -38,7 +52,7 @@ var searchRestaurant = function (query) {
             "</p>" +
             '<b class="mb-1">Occupants: ' +
             occupancy +
-            "/25 </b>" +
+            " / " + max_occupancy + " </b>" +
             "<small>Donec id elit non mi porta.</small>" +
             "</a><br/>"
         );
@@ -50,32 +64,31 @@ var searchRestaurant = function (query) {
 
 //searchRestaurant("italian")
 
-var showOppcupants = function (id, latlng) {
+var showOppcupants = function (id, latlng, name) {
   map.setView([latlng[0], latlng[1]]);
   $.ajax({
     url:
-      "https://api.tomtom.com/search/2/poiDetails.json?key=jnwGidcOyjITnIRR2AqJSl7XV9COZdyh&id=" +
+      "http://localhost:5000/api/restaurant/id/" +
       id,
     type: "GET",
   }).done(function (data) {
     console.log(data);
+
+    $(".pickup-box").empty();
+    $(".pickup-box").append(
+        '<div class="card border-success mb-3" style="max-width: 18rem;">' +
+        '<div class="card-header"><b>' + name + '</b></div>' +
+        '<div class="card-body text-success">' +
+        '<h5 class="card-title">Occupancy: <span id="occupancy">' + data.result.occupancy +'</span> / ' + data.result.max_occupancy + '</h5>' +
+        //'<p class="card-text">' + name + '</p>' +
+        '<button type="button" class="btn btn-success btn-lg checkin-btn" onclick="checkIn(\'' +
+        id +
+        "')\">Check In</button>" +
+        '<button type="button" class="btn btn-outline-danger" onclick="closePickupBox()">Done</button>' +
+        "</div>" +
+        "</div>"
+    );
   });
-  $(".pickup-box").empty();
-  $(".pickup-box").append(
-    '<div class="card text-dark bg-transparent mb-3" style="max-width: 18rem;">' +
-      '<div class="card-header ">Header<a href="#" class="card-link text-end" onclick="closePickupBox()">Close</a></div>' +
-      '<img src="https://i.ytimg.com/vi/Wzh6OUYJX0c/maxresdefault.jpg" class="card-img-top" alt="...">' +
-      '<div class="card-body">' +
-      '<h5 class="card-title">' +
-      id +
-      "</h5>" +
-      '<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>' +
-      '<button type="button" class="btn btn-outline-danger" onclick="checkIn(\'' +
-      id +
-      "')\">Check In</button>" +
-      "</div>" +
-      "</div>"
-  );
 };
 
 var closePickupBox = function () {
@@ -89,6 +102,9 @@ var checkIn = function (id) {
     type: "PUT",
   }).done(function (data) {
     console.log(data);
+    $("#occupancy").text(data.occupants);
+    //$(".pickup-box").empty();
+    //showOppcupants(id, latlng, name)
   });
 
   var query = $("#query").val();

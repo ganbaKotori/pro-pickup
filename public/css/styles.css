@@ -24,19 +24,20 @@ hr {
 }
 
 .pickup-box {
-  background-color: rgba(21, 255, 40, 0.428);
   border-radius: 2px;
   font-family: sans-serif;
-  line-height: 1;
- -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(17px);
+  width: 350px;
   max-height: 80vh;
   overflow: scroll;
-  border-radius: 15px;
+
 }
 
 .search-bar {
   margin-top: 3%;
+}
+
+.checkin-btn {
+  margin-right: 30px;
 }
 
 html,
