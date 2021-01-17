@@ -48,19 +48,16 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet-pulse-icon@0.1.0/src/L.Icon.Pulse.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-pulse-icon@0.1.0/src/L.Icon.Pulse.css">
 
-
-
     <!-- MarkerCluster CDN-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js" integrity="sha512-MQlyPV+ol2lp4KodaU/Xmrn+txc1TP15pOBF/2Sfre7MRsA/pB4Vy58bEqe9u7a7DczMLtU5wT8n7OblJepKbg==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" integrity="sha512-BBToHPBStgMiw0lD4AtkRIZmdndhB6aQbXpX7omcrXeG2PauGBl2lzq2xUZTxaLxYz5IDHlmneCZ1IJ+P3kYtQ==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" integrity="sha512-RLEjtaFGdC4iQMJDbMzim/dOvAu+8Qp9sw7QE4wIMYcg2goVoivzwgSZq9CsIxp4xKAZPKh5J2f2lOko2Ze6FQ==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster-src.js" integrity="sha512-gu3GZbPnPGREFcXgxeWVbp9Oeq3Tdvskd5PaQ0q//PCDMsa0WSSABIqLDwF5ebaDBfJbcM+lamNEe8ln9dPWwA==" crossorigin="anonymous"></script>
-
     <!-- Locate Me-->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 
-<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
 
 
 </head>
@@ -75,25 +72,47 @@
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
   </nav>-->
+
+
   <div class="container-fluid">
+      <!-- Button trigger modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Go Get Your Food!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Head inside the restaurant, skip the line, and grab your order.</p>
+          <p>Once you are finished, click "Done" on the bottom left corner to keep
+          the current occupancy updated.</p>
+          <p>To ensure maximum safety for yourself and others, please wear a mask and stay at least 6
+          feet away from other people.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="row">
       <div class="col" id="map"></div>
     </div>
   </div>
-  
   <script>
     //Initialize map with a set view zoomed in 5 times to the set coodinates.
     var map = L.map("map", {
       drawControl: true,
       zoomControl: false,
-    }).setView([44.042489692042125, -118.24725764836552], 10);
+    }).setView([39.8283, -98.5795], 4);
     L.tileLayer('https://api.mapbox.com/styles/v1/kotori13378/ckjz5nxza084817pbvazjfeum/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoia290b3JpMTMzNzgiLCJhIjoiY2tqd2RwYzF1MGVlbDMwbmxiYWR2NWkzZSJ9.s4hAHjSw-Avhn0EpX6hRUg', {
     }).addTo(map);
-    map.locate({setView: true, maxZoom: 16});
-    //L.control.locate().addTo(map);
   </script>
-  <script src="js/covid.js"></script>
-  <script src="js/searchPlaces.js"></script>
+  <script src="js/searchRestaurants.js"></script>
   <script src="js/index.js"></script>
 </body>
 

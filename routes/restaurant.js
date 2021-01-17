@@ -15,9 +15,9 @@ app.get('/id/:id', async (req, res) => {
     }
   })
 
-app.get('/:restaurant', (req, res) => {
+app.post('/:restaurant', (req, res) => {
     console.log("tomtom api")
-    axios.get('https://api.tomtom.com/search/2/search/' + req.params.restaurant + '.json?countrySet=US&lat=34.840108&lon=-115.9668749&categorySet=7315&key=mG11ZnzuVENJeDG4KLkn6QnNFA3Sx5RZ')
+    axios.get('https://api.tomtom.com/search/2/search/' + req.params.restaurant + '.json?countrySet=US&lat=' + req.body.lat + '&lon=' + req.body.lng + '&categorySet=7315&key=mG11ZnzuVENJeDG4KLkn6QnNFA3Sx5RZ')
   .then(async function (response) {
     // handle success
     //console.log(response.data);
@@ -69,6 +69,20 @@ app.get('/:restaurant', (req, res) => {
     
     if(restaurant){
         restaurant.occupancy += 1;
+    }
+    restaurant
+      .save()
+      .then((results) => {res.json({"occupants" : restaurant.occupancy})})
+      .catch((err) => res.status(400).json("Error: " + err));
+  })
+
+  app.put('/check-out/:id', async (req, res) => {
+    const restaurant = await Restaurant.findOne({
+        "pid": req.params.id,
+      });
+    
+    if(restaurant){
+        restaurant.occupancy -= 1;
     }
     restaurant
       .save()

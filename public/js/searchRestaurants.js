@@ -2,12 +2,14 @@ var currentlySelectedRestaurant;
 var restaurantsFromQuery = [];
 
 var searchRestaurant = function (query) {
+  markerGroup.eachLayer(function(layer) { map.removeLayer(layer);});
   console.log(query);
-  $.get(
+  console.log(map.getCenter())
+  $.post(
     "http://localhost:5000/api/restaurant/" + query, // url
-    { restaurant: query },
+    { lat: map.getCenter().lat,
+    lng : map.getCenter().lng },
     function (data, textStatus, jqXHR) {
-      // success callback
       console.log(data);
       restaurantsFromQuery = [];
       var restaurants = data.results;
@@ -19,12 +21,7 @@ var searchRestaurant = function (query) {
         var marker = L.marker([
           restaurants[key].position.lat,
           restaurants[key].position.lon,
-        ]).addTo(map);
-        //$(".blurBox").append("<p>" + restaurants[key].poi.name + "</p>")
-        var address =
-          restaurants[key].address.streetNumber +
-          " " +
-          restaurants[key].address.streetName;
+        ]).addTo(markerGroup);
         var occupancy = restaurants[key].occupancy
           ? restaurants[key].occupancy
           : 0;
@@ -33,7 +30,7 @@ var searchRestaurant = function (query) {
           : "10";
         $(".blurBox").append(
           "<hr/>" +
-            "<a onclick=\"showOppcupants('" +
+            "<a class='foo' onclick=\"showOppcupants('" +
             restaurants[key].id +
             "',[" +
             restaurants[key].position.lat +
@@ -41,19 +38,17 @@ var searchRestaurant = function (query) {
             restaurants[key].position.lon +
             "],'" +
             name + 
-            '\')"><div class="d-flex w-100 justify-content-between">' +
+            '\')"><div class="d-flex w-100 justify-content-between foo">' +
             '<h5 class="mb-1">' +
             restaurants[key].poi.name +
             "</h5>" +
-            "<small>3 days ago</small>" +
             "</div>" +
             '<p class="mb-1">' +
             restaurants[key].address.freeformAddress +
             "</p>" +
-            '<b class="mb-1">Occupants: ' +
+            '<b class="mb-1 foo">Occupants: ' +
             occupancy +
             " / " + max_occupancy + " </b>" +
-            "<small>Donec id elit non mi porta.</small>" +
             "</a><br/>"
         );
       }
@@ -83,8 +78,11 @@ var showOppcupants = function (id, latlng, name) {
         //'<p class="card-text">' + name + '</p>' +
         '<button type="button" class="btn btn-success btn-lg checkin-btn" onclick="checkIn(\'' +
         id +
-        "')\">Check In</button>" +
-        '<button type="button" class="btn btn-outline-danger" onclick="closePickupBox()">Done</button>' +
+        "')\" data-toggle='modal' data-target='#exampleModal'>Check In</button>" +
+        //'<button type="button" class="btn btn-outline-danger" onclick="closePickupBox()">Done</button>' +
+        '<button type="button" class="btn btn-outline-danger" onclick="checkOut(\'' +
+        id +
+        "')\">Done</button>" +
         "</div>" +
         "</div>"
     );
@@ -110,3 +108,19 @@ var checkIn = function (id) {
   var query = $("#query").val();
   searchRestaurant(query);
 };
+
+var checkOut = function (id) {
+    console.log(id);
+    $.ajax({
+      url: "http://localhost:5000/api/restaurant/check-out/" + id,
+      type: "PUT",
+    }).done(function (data) {
+      console.log(data);
+      $("#occupancy").text(data.occupants);
+      //$(".pickup-box").empty();
+      //showOppcupants(id, latlng, name)
+    });
+  
+    var query = $("#query").val();
+    searchRestaurant(query);
+  };
