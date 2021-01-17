@@ -45,7 +45,7 @@ app.get('/:restaurant', (req, res) => {
   })
 
 
-  app.put('/add-occupant/:id', async (req, res) => {
+  app.put('/check-in/:id', async (req, res) => {
     const restaurant = await Restaurant.findOne({
         "pid": req.params.id,
       });

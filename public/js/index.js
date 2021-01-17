@@ -7,7 +7,7 @@ $.ajax({
     $$app_token: "a2kvHD9X0ctQWM262zde4wxEz",
   },
 }).done(function (data) {
-  alert("Retrieved " + data.length + " records from the dataset!");
+  //alert("Retrieved " + data.length + " records from the dataset!");
   console.log(data);
   addCrimeMarkers(data);
 });
@@ -129,7 +129,7 @@ L.control
   .addTo(map);
 
 $("#btnSubmitModal").click(function () {
-  alert("hey");
+  //alert("hey");
   console.log($("#query").val());
   var query = $("#query").val();
   searchRestaurant(query);
