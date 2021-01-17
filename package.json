@@ -1,0 +1,30 @@
+{
+  "name": "pro-pickup",
+  "version": "1.0.0",
+  "description": "app to track occupancy of restaurants",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ganbaKotori/pro-pickup.git"
+  },
+  "keywords": [
+    "map"
+  ],
+  "author": "Alexander Ramirez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ganbaKotori/pro-pickup/issues"
+  },
+  "homepage": "https://github.com/ganbaKotori/pro-pickup#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.12",
+    "twilio": "^3.55.0"
+  }
+}
